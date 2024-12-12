@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">E-Commerce</a>
+        </div>
+    </header>
+    <main class="container my-5">
+        <h1 class="mb-4 text-center">Admin Panel</h1>
+
+        <!-- Form لإضافة منتج جديد -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3>Add New Product</h3>
+                <form id="addProductForm">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Product Name" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="price">Price</label>
+                            <input type="number" id="price" class="form-control" placeholder="Price" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" class="form-control" placeholder="Product Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="image_url">Image URL</label>
+                        <input type="url" id="image_url" class="form-control" placeholder="Product Image URL">
+                    </div>
+                    <div class="form-group">
+                        <label for="category_id">Category ID</label>
+                        <input type="number" id="category_id" class="form-control" placeholder="Category ID" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Add Product</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- جدول المنتجات -->
+        <h3 class="mt-5 mb-3">Manage Products</h3>
+        <table class="table table-bordered" id="productTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- المنتجات تظهر هنا -->
+            </tbody>
+        </table>
+    </main>
+    <script src="js/admin.js"></script>
+</body>
+</html>
