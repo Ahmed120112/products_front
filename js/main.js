@@ -1,6 +1,6 @@
 let cart = [];
 
-// تحميل المنتجات وعرضها
+
 document.addEventListener('DOMContentLoaded', () => {
     fetch('http://127.0.0.1:5000/api/products')
         .then(response => response.json())
@@ -39,7 +39,7 @@ function addToCart(productId, name, price) {
     updateCart();
 }
 
-// تحديث السلة
+
 function updateCart() {
     const cartItems = document.getElementById('cartItems');
     const totalPrice = document.getElementById('totalPrice');
@@ -63,7 +63,7 @@ function updateCart() {
     totalPrice.textContent = `Total: $${total.toFixed(2)}`;
 }
 
-// تغيير الكمية
+
 function changeQuantity(productId, change) {
     const product = cart.find(item => item.id === productId);
     if (product) {
@@ -75,13 +75,13 @@ function changeQuantity(productId, change) {
     }
 }
 
-// مسح السلة
+
 document.getElementById('clearCart').addEventListener('click', () => {
     cart = [];
     updateCart();
 });
 
-// فتح/إغلاق السلة
+
 document.getElementById('cartButton').addEventListener('click', () => {
     document.getElementById('cartSidebar').classList.add('active');
 });
