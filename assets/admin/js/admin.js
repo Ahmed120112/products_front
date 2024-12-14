@@ -43,10 +43,10 @@ function loadProducts() {
                     <td>$${product.price.toFixed(2)}</td>
                     <td>${product.description || 'No description available'}</td>
                     <td>
-                        <img src="${product.image_url || 'https://via.placeholder.com/50'}" alt="${product.name}" width="50">
+                        <img src="${product.image_url || 'assets/images/placeholders/default.png'}" alt="${product.name}" width="50">
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-secondary" onclick="editProduct(${product.id}, '${product.name}', ${product.price}, '${product.description || ''}', ${product.category_id})">Edit</button>
+                        <button class="btn btn-sm btn-secondary" onclick="editProduct(${product.id})">Edit</button>
                         <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})">Delete</button>
                     </td>
                 `;
@@ -59,13 +59,10 @@ function loadProducts() {
 function deleteProduct(productId) {
     if (confirm('Are you sure you want to delete this product?')) {
         fetch(`http://127.0.0.1:5000/api/products/${productId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
         })
         .then(response => {
             if (!response.ok) throw new Error('Failed to delete product');
-            return response.json();
-        })
-        .then(() => {
             alert('Product deleted successfully!');
             loadProducts();
         })
@@ -73,33 +70,51 @@ function deleteProduct(productId) {
     }
 }
 
-function editProduct(id, name, price, description, category_id) {
-    const newName = prompt('Edit Name:', name);
-    const newPrice = prompt('Edit Price:', price);
-    const newDescription = prompt('Edit Description:', description);
-    const newCategoryId = prompt('Edit Category ID:', category_id);
+function editProduct(productId) {
+    // التحقق من ID المنتج
+    if (!productId) {
+        console.error('Product ID is undefined');
+        return;
+    }
 
-    if (newName && newPrice) {
-        const updatedData = {
-            name: newName,
-            price: parseFloat(newPrice),
-            description: newDescription,
-            category_id: parseInt(newCategoryId)
-        };
+    // جلب بيانات المنتج
+    fetch(`http://127.0.0.1:5000/api/products/${productId}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to fetch product');
+            return response.json();
+        })
+        .then(product => {
+         
+            if (!product) {
+                console.error('Product not found');
+                return;
+            }
 
-        fetch(`http://127.0.0.1:5000/api/products/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedData)
+        
+            const newName = prompt('Edit Name:', product.name) || product.name;
+            const newPrice = parseFloat(prompt('Edit Price:', product.price)) || product.price;
+            const newDescription = prompt('Edit Description:', product.description || 'No description') || product.description;
+            const newCategoryId = parseInt(prompt('Edit Category ID:', product.category_id)) || product.category_id;
+
+        
+            const updatedProduct = {
+                name: newName,
+                price: newPrice,
+                description: newDescription,
+                category_id: newCategoryId,
+            };
+
+         
+            return fetch(`http://127.0.0.1:5000/api/products/${productId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedProduct),
+            });
         })
         .then(response => {
             if (!response.ok) throw new Error('Failed to update product');
-            return response.json();
-        })
-        .then(() => {
             alert('Product updated successfully!');
-            loadProducts();
+            loadProducts(); // تحديث القائمة
         })
-        .catch(err => console.error('Error updating product:', err));
-    }
+        .catch(err => console.error('Error editing product:', err));
 }
